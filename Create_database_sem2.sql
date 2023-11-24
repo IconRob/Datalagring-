@@ -10,7 +10,7 @@ CREATE TABLE instructor (
  instructor_id SERIAL NOT NULL,
  first_name VARCHAR(50),
  last_name VARCHAR(50),
- person_number VARCHAR(12) NOT NULL,
+ person_number VARCHAR(12) NOT NULL UNIQUE,
  street VARCHAR(50),
  zip VARCHAR(50),
  city VARCHAR(50),
@@ -100,7 +100,7 @@ CREATE TABLE student (
  sibling_group_id INT,
  first_name VARCHAR(50),
  last_name VARCHAR(50),
- person_number VARCHAR(12) NOT NULL,
+ person_number VARCHAR(12) NOT NULL UNIQUE,
  street VARCHAR(50),
  zip VARCHAR(50),
  city VARCHAR(50)
@@ -169,35 +169,35 @@ CREATE TABLE instrument_booking (
 ALTER TABLE instrument_booking ADD CONSTRAINT PK_instrument_booking PRIMARY KEY (instrument_booking_id);
 
 
-ALTER TABLE price ADD CONSTRAINT FK_price_0 FOREIGN KEY (payment_id) REFERENCES payment (payment_id);
+ALTER TABLE price ADD CONSTRAINT FK_price_0 FOREIGN KEY (payment_id) REFERENCES payment (payment_id); -- ON DELETE NO ACTION TODO payment_id no longer on price.
 
 
-ALTER TABLE student ADD CONSTRAINT FK_student_0 FOREIGN KEY (sibling_group_id) REFERENCES sibling_group (sibling_group_id);
+ALTER TABLE student ADD CONSTRAINT FK_student_0 FOREIGN KEY (sibling_group_id) REFERENCES sibling_group (sibling_group_id) ON DELETE SET NULL;
 
 
-ALTER TABLE student_contact ADD CONSTRAINT FK_student_contact_0 FOREIGN KEY (contact_id) REFERENCES contact (contact_id);
-ALTER TABLE student_contact ADD CONSTRAINT FK_student_contact_1 FOREIGN KEY (student_id) REFERENCES student (student_id);
+ALTER TABLE student_contact ADD CONSTRAINT FK_student_contact_0 FOREIGN KEY (contact_id) REFERENCES contact (contact_id) ON DELETE CASCADE;
+ALTER TABLE student_contact ADD CONSTRAINT FK_student_contact_1 FOREIGN KEY (student_id) REFERENCES student (student_id) ON DELETE CASCADE;
 
 
-ALTER TABLE student_number ADD CONSTRAINT FK_student_number_0 FOREIGN KEY (number_id) REFERENCES number (number_id);
-ALTER TABLE student_number ADD CONSTRAINT FK_student_number_1 FOREIGN KEY (student_id) REFERENCES student (student_id);
+ALTER TABLE student_number ADD CONSTRAINT FK_student_number_0 FOREIGN KEY (number_id) REFERENCES number (number_id) ON DELETE CASCADE;
+ALTER TABLE student_number ADD CONSTRAINT FK_student_number_1 FOREIGN KEY (student_id) REFERENCES student (student_id) ON DELETE CASCADE;
 
 
-ALTER TABLE booking ADD CONSTRAINT FK_booking_0 FOREIGN KEY (instructor_id) REFERENCES instructor (instructor_id);
-ALTER TABLE booking ADD CONSTRAINT FK_booking_1 FOREIGN KEY (classroom_id) REFERENCES location (classroom_id);
-ALTER TABLE booking ADD CONSTRAINT FK_booking_2 FOREIGN KEY (price_id) REFERENCES price (price_id);
-ALTER TABLE booking ADD CONSTRAINT FK_booking_3 FOREIGN KEY (student_id) REFERENCES student (student_id);
+ALTER TABLE booking ADD CONSTRAINT FK_booking_0 FOREIGN KEY (instructor_id) REFERENCES instructor (instructor_id) ON DELETE NO ACTION;
+ALTER TABLE booking ADD CONSTRAINT FK_booking_1 FOREIGN KEY (classroom_id) REFERENCES location (classroom_id) ON DELETE SET NULL;
+ALTER TABLE booking ADD CONSTRAINT FK_booking_2 FOREIGN KEY (price_id) REFERENCES price (price_id) ON DELETE NO ACTION;
+ALTER TABLE booking ADD CONSTRAINT FK_booking_3 FOREIGN KEY (student_id) REFERENCES student (student_id) ON DELETE NO ACTION;
 
 
-ALTER TABLE instructor_instrument_1 ADD CONSTRAINT FK_instructor_instrument_1_0 FOREIGN KEY (instrument_1_id) REFERENCES instrument_1 (instrument_1_id);
-ALTER TABLE instructor_instrument_1 ADD CONSTRAINT FK_instructor_instrument_1_1 FOREIGN KEY (instructor_id) REFERENCES instructor (instructor_id);
+ALTER TABLE instructor_instrument_1 ADD CONSTRAINT FK_instructor_instrument_1_0 FOREIGN KEY (instrument_1_id) REFERENCES instrument_1 (instrument_1_id) ON DELETE CASCADE;
+ALTER TABLE instructor_instrument_1 ADD CONSTRAINT FK_instructor_instrument_1_1 FOREIGN KEY (instructor_id) REFERENCES instructor (instructor_id) ON DELETE CASCADE;
 
 
-ALTER TABLE instructor_phone ADD CONSTRAINT FK_instructor_phone_0 FOREIGN KEY (phone_id) REFERENCES phone (phone_id);
-ALTER TABLE instructor_phone ADD CONSTRAINT FK_instructor_phone_1 FOREIGN KEY (instructor_id) REFERENCES instructor (instructor_id);
+ALTER TABLE instructor_phone ADD CONSTRAINT FK_instructor_phone_0 FOREIGN KEY (phone_id) REFERENCES phone (phone_id) ON DELETE CASCADE;
+ALTER TABLE instructor_phone ADD CONSTRAINT FK_instructor_phone_1 FOREIGN KEY (instructor_id) REFERENCES instructor (instructor_id) ON DELETE CASCADE;
 
 
-ALTER TABLE instrument_booking ADD CONSTRAINT FK_instrument_booking_0 FOREIGN KEY (instrument_id) REFERENCES instrument (instrument_id);
-ALTER TABLE instrument_booking ADD CONSTRAINT FK_instrument_booking_1 FOREIGN KEY (student_id) REFERENCES student (student_id);
+ALTER TABLE instrument_booking ADD CONSTRAINT FK_instrument_booking_0 FOREIGN KEY (instrument_id) REFERENCES instrument (instrument_id) ON DELETE NO ACTION;
+ALTER TABLE instrument_booking ADD CONSTRAINT FK_instrument_booking_1 FOREIGN KEY (student_id) REFERENCES student (student_id) ON DELETE NO ACTION;
 
 
