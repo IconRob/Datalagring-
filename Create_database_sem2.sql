@@ -79,7 +79,6 @@ ALTER TABLE phone ADD CONSTRAINT PK_phone PRIMARY KEY (phone_id);
 
 CREATE TABLE price (
  price_id SERIAL NOT NULL,
- payment_id INT,
  lecture_price INT,
  skill_price INT,
  discount INT
@@ -133,7 +132,7 @@ CREATE TABLE booking (
  instrument_type VARCHAR(50),
  genre VARCHAR(50),
  skill_level VARCHAR(50),
- time_slot TIMESTAMP(10),
+ time_slot TIMESTAMP,
  lesson_type VARCHAR(50),
  student_id INT
 );
