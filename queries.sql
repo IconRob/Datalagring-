@@ -39,7 +39,7 @@ GROUP BY
 
 
 -- TASK 3.2 Siblingstable
-CREATE VIEW student_siblings AS
+-- CREATE VIEW student_siblings AS
 SELECT
   No_of_Siblings,
   COUNT(*) AS No_of_Students
@@ -62,7 +62,7 @@ ORDER BY
 
 
 -- Task 3.3, Lessons for specific teachers during a period
-CREATE VIEW list_instructor_id AS
+-- CREATE VIEW list_instructor_id AS
 SELECT
   i.instructor_id,
   i.first_name,
