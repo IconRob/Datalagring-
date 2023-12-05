@@ -2,7 +2,6 @@
 
 
 -- Task 3.1 Weekly number of lessons during a year
-EXPLAIN ANALYZE
 SELECT 
     CASE EXTRACT(MONTH FROM b.start_time)
         WHEN 1 THEN 'Jan'
