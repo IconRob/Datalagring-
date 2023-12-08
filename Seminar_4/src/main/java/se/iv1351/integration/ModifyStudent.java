@@ -1,4 +1,5 @@
 package se.iv1351.integration;
+import java.sql.ResultSet;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -58,5 +59,17 @@ public class ModifyStudent {
             e.printStackTrace();
             return false;
         }
+    }
+
+    public ResultSet getAvailableInstruments() {
+        ResultSet resultSet = null;
+        try {
+            String query = "SELECT * FROM instrument_rental WHERE available = TRUE";
+            PreparedStatement preparedStatement = connection.prepareStatement(query);
+            resultSet = preparedStatement.executeQuery();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return resultSet;
     }
 }
