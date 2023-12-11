@@ -1,20 +1,12 @@
 package se.iv1351.gui;
+
 import se.iv1351.integration.ModifyStudent;
-import java.sql.ResultSet;
 import javax.swing.*;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
 import javax.swing.table.DefaultTableModel;
-import java.sql.Date;
-
-
-
-
-
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+
 public class RentalStudentWindow extends JFrame {
     private ModifyStudent modifyStudent;
     private JTable instrumentTable;
@@ -27,7 +19,7 @@ public class RentalStudentWindow extends JFrame {
 
         // Hämta instrumentdata
         ResultSet resultSet = modifyStudent.getAvailableInstruments();
-        String[] columnNames = {"Instrument ID", "Type", "Brand", "Price per Month", /*"Category", "Date Available"*/};
+        String[] columnNames = {"Instrument ID", "Type", "Brand", "Price per Month"/*, "Category", "Date Available"*/};
         DefaultTableModel tableModel = new DefaultTableModel(columnNames, 0);
 
         try {
@@ -37,13 +29,23 @@ public class RentalStudentWindow extends JFrame {
                 String brand = resultSet.getString("brand");
                 float price = resultSet.getFloat("price_per_month");
                 //String category = resultSet.getString("category");
-                //Date date = resultSet.getDate("date");
+                // Notera: Datumet konverteras till String för att visa i tabellen
+                //String date = resultSet.getDate("date").toString();
 
                 // Lägg till rad i tabellmodellen
-                tableModel.addRow(new Object[] {id, type, brand, price, /*category, date*/});
+                tableModel.addRow(new Object[]{id, type, brand, price/*, category, date*/});
             }
         } catch (SQLException e) {
             e.printStackTrace();
+        } finally {
+            // Stäng ResultSet och PreparedStatement om de inte längre behövs
+            try {
+                if (resultSet != null) {
+                    resultSet.close();
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
         }
 
         // Skapa tabellen med datan
