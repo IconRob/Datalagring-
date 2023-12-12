@@ -6,9 +6,15 @@ import java.sql.SQLException;
 
 public class DatabaseConnector {
     private final String url = "jdbc:postgresql://localhost:5433/soundgood_ver_4";
-    private final String user = "postgres"; // Byt ut mot ditt faktiska användarnamn
-    private final String password = ""; // Byt ut mot ditt faktiska lösenord
+    private final String user = "postgres";
+    private final String password = "";
 
+
+    /**
+     * Attempts to establish a connection to the PostgreSQL database.
+     *
+     * @return A database Connection object if the connection is successful, or null otherwise.
+     */
     public Connection connect() {
         Connection conn = null;
         try {

@@ -9,15 +9,26 @@ import java.sql.ResultSet;
 
 
 
-
+/**
+ * The DatabaseOperations class provides methods for interacting with the database.
+ */
 public class DatabaseOperations {
     private Connection connection;
 
+    /**
+     * Creates a new instance of the DatabaseOperations class with the specified database connection.
+     *
+     * @param connection The database connection.
+     */
     public DatabaseOperations(Connection connection) {
         this.connection = connection;
     }
 
-    // Metod för att hämta alla tillgängliga instrument för uthyrning
+    /**
+     * Retrieves a list of all available instruments for rental.
+     *
+     * @return A list of Instrument objects representing available instruments.
+     */
     public List<Instrument> getAvailableInstruments() {
         List<Instrument> instruments = new ArrayList<>();
         String query = "SELECT * FROM instrument_rental WHERE available = TRUE";
@@ -41,7 +52,11 @@ public class DatabaseOperations {
         return instruments;
     }
 
-    //Metod för att hämta alla studenter.
+    /**
+     * Retrieves a list of all students.
+     *
+     * @return A list of student names.
+     */
     public List<String> getAllStudents() {
         List<String> students = new ArrayList<>();
         String query = "SELECT student_id, first_name, last_name FROM student";
@@ -59,6 +74,11 @@ public class DatabaseOperations {
         return students;
     }
 
+    /**
+     * Retrieves a list of all available instruments using an updated query to check both availability and active rental status.
+     *
+     * @return A list of strings representing available instruments.
+     */
     public List<String> getAvailableInstruments1() {
         List<String> instruments = new ArrayList<>();
         // Uppdaterad fråga för att kontrollera både tillgänglighet och aktiv uthyrningsstatus
@@ -81,25 +101,11 @@ public class DatabaseOperations {
         return instruments;
     }
 
-
-    //Metod för att hitta tillgängliga instrument
-   /* public List<String> getAvailableInstruments1() {
-        List<String> instruments = new ArrayList<>();
-        String query = "SELECT instrument_rental_id, type, brand FROM instrument_rental WHERE available = TRUE";
-        try (PreparedStatement stmt = connection.prepareStatement(query);
-             ResultSet rs = stmt.executeQuery()) {
-            while (rs.next()) {
-                String instrument = rs.getInt("instrument_rental_id") + " - " +
-                        rs.getString("type") + " (" +
-                        rs.getString("brand") + ")";
-                instruments.add(instrument);
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return instruments;
-    }*/
-
+    /**
+     * Retrieves a list of all active rentals.
+     *
+     * @return A list of strings representing active rentals.
+     */
     public List<String> getActiveRentals() {
         List<String> activeRentals = new ArrayList<>();
         String query = "SELECT r.student_id, r.instrument_booking_id, ib.instrument_rental_id " +

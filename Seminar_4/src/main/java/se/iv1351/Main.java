@@ -7,6 +7,8 @@ import se.iv1351.gui.MainApplication;
 import javax.swing.*;
 import java.sql.Connection;
 
+
+
 public class Main {
     public static void main(String[] args) {
         // Attempt to establish a database connection
@@ -21,6 +23,9 @@ public class Main {
 
         // Run the GUI in the event dispatch thread
         SwingUtilities.invokeLater(new Runnable() {
+            /**
+             * The run method starts the GUI with a ModifyStudent instance.
+             */
             public void run() {
                 // Pass the ModifyStudent instance to MainApplication
                 ModifyStudent modifyStudent = new ModifyStudent(connection);
