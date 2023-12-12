@@ -15,7 +15,7 @@ import java.util.List;
 public class InstrumentRentalWindow extends JFrame {
     private ModifyStudent modifyStudent;
     private JComboBox<String> studentComboBox, instrumentComboBox;
-    private JButton rentButton, terminateButton;
+    private JButton rentButton;
 
     /**
      * Constructs an InstrumentRentalWindow with a ModifyStudent instance for handling rental operations.
@@ -32,7 +32,6 @@ public class InstrumentRentalWindow extends JFrame {
         studentComboBox = new JComboBox<>();
         instrumentComboBox = new JComboBox<>();
         rentButton = new JButton("Rent Instrument");
-        terminateButton = new JButton("Terminate Rental");
 
         loadStudentData();
         loadInstrumentData();
@@ -45,12 +44,6 @@ public class InstrumentRentalWindow extends JFrame {
             }
         });
 
-        terminateButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                terminateRental();
-            }
-        });
 
         // Adding components to the layout
         add(new JLabel("Student:"));
@@ -58,7 +51,6 @@ public class InstrumentRentalWindow extends JFrame {
         add(new JLabel("Instrument:"));
         add(instrumentComboBox);
         add(rentButton);
-        add(terminateButton);
 
         // Finalize window setup
         setLocationRelativeTo(null);
@@ -93,9 +85,5 @@ public class InstrumentRentalWindow extends JFrame {
         }
     }
 
-    private void terminateRental() {
-        // Implementera logiken för att avsluta en uthyrning
-        // Exempelvis kan du ha en annan JComboBox för att välja vilken uthyrning som ska avslutas
-    }
 }
 
