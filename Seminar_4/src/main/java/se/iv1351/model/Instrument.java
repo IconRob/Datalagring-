@@ -1,4 +1,4 @@
-package se.iv1351.model; // Antag att detta är paketet där du placerar dina modeller
+package se.iv1351.model;
 
 public class Instrument {
     private int id;
@@ -17,7 +17,7 @@ public class Instrument {
         this.date = date;
     }
 
-    // Getters (och eventuellt setters om du behöver dem)
+    // Getters and settera
     public int getId() {
         return id;
     }
