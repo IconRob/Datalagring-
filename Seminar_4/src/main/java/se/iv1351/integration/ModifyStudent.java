@@ -9,21 +9,44 @@ import se.iv1351.database.DatabaseOperations;
 import java.sql.Statement;
 import java.time.LocalDate;
 
-
+/**
+ * The ModifyStudent class provides methods for modifying student information and instrument rentals.
+ */
 public class ModifyStudent {
     private Connection connection;
     private DatabaseOperations databaseOperations;
 
 
+    /**
+     * Creates a new instance of the ModifyStudent class with the specified database connection.
+     *
+     * @param connection The database connection.
+     */
     public ModifyStudent(Connection connection) {
         this.connection = connection;
         this.databaseOperations = new DatabaseOperations(connection);
     }
 
+    /**
+     * Retrieves the DatabaseOperations object associated with this ModifyStudent instance.
+     *
+     * @return The DatabaseOperations object.
+     */
     public DatabaseOperations getDatabaseOperations() {
         return databaseOperations;
     }
 
+    /**
+     * Adds a new student to the database.
+     *
+     * @param firstName    The first name of the student.
+     * @param lastName     The last name of the student.
+     * @param personNumber The personal identification number of the student.
+     * @param street       The street address of the student.
+     * @param zip          The postal code of the student's city.
+     * @param city         The city where the student lives.
+     * @return True if the student was successfully added, false otherwise.
+     */
     public boolean addStudent(String firstName, String lastName, String personNumber, String street, String zip, String city) {
         try {
             // Skapa en SQL-fråga för att lägga till en student i tabellen "student"
@@ -51,6 +74,12 @@ public class ModifyStudent {
         }
     }
 
+    /**
+     * Deletes a student from the database.
+     *
+     * @param studentId The ID of the student to delete.
+     * @return True if the student was successfully deleted, false otherwise.
+     */
     public boolean deleteStudent(int studentId) {
         try {
             // Skapa en SQL-fråga för att ta bort en student med ett visst student_id
@@ -73,6 +102,7 @@ public class ModifyStudent {
         }
     }
 
+    
     public ResultSet getAvailableInstruments() {
         ResultSet resultSet = null;
         try {
