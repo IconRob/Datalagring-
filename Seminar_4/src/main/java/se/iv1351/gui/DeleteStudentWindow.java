@@ -1,17 +1,25 @@
 package se.iv1351.gui;
 
 import se.iv1351.integration.ModifyStudent;
-
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+/**
+ * The DeleteStudentWindow class provides a GUI window for deleting existing students from the database.
+ * It allows the user to enter a student ID and delete the corresponding student record.
+ */
 public class DeleteStudentWindow extends JFrame {
     private JTextField studentIdField;
     private JButton deleteButton;
     private ModifyStudent modifyStudent;
-
+    
+    /**
+     * Constructs a DeleteStudentWindow with a ModifyStudent instance for database operations.
+     *
+     * @param modifyStudent An instance of ModifyStudent for handling student modifications.
+     */
     public DeleteStudentWindow(ModifyStudent modifyStudent) {
         this.modifyStudent = modifyStudent;
 
@@ -19,6 +27,7 @@ public class DeleteStudentWindow extends JFrame {
         studentIdField = new JTextField(20);
         deleteButton = new JButton("Delete");
 
+        // Adding action listener for the delete button
         deleteButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {

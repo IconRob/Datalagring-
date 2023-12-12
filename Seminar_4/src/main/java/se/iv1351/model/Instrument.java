@@ -1,5 +1,8 @@
 package se.iv1351.model;
 
+/**
+ * Instrument class represents a musical instrument in the system.
+ */
 public class Instrument {
     private int id;
     private String type;
@@ -8,6 +11,16 @@ public class Instrument {
     private String category;
     private java.sql.Date date;
 
+    /**
+     * Constructs an Instrument with specified details.
+     *
+     * @param id The ID of the instrument.
+     * @param type The type of the instrument.
+     * @param brand The brand of the instrument.
+     * @param price The rental price of the instrument.
+     * @param category The category of the instrument.
+     * @param date The date the instrument is available from.
+     */
     public Instrument(int id, String type, String brand, float price, String category, java.sql.Date date) {
         this.id = id;
         this.type = type;
