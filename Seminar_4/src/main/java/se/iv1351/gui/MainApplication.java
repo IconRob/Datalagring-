@@ -6,9 +6,10 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import se.iv1351.gui.TerminateRentalWindow;
 
 public class MainApplication extends JFrame {
-    private JButton addButton, deleteButton, rentalButton;
+    private JButton addButton, deleteButton, avalibleInstrumentButton, rentalButton, terminateRentalButton;
     private ModifyStudent modifyStudent;
 
     public MainApplication(ModifyStudent modifyStudent) {
@@ -20,7 +21,10 @@ public class MainApplication extends JFrame {
         JLabel windowLabel = new JLabel("Soundgood Adminpanel");
         addButton = new JButton("Add Student");
         deleteButton = new JButton("Delete Student");
-        rentalButton = new JButton("Instruments for rental");
+        avalibleInstrumentButton = new JButton("Instruments for rental");
+        rentalButton = new JButton("Rent Instrument");
+        terminateRentalButton = new JButton("End rental");
+
 
 
         // Set up button actions
@@ -38,10 +42,24 @@ public class MainApplication extends JFrame {
             }
         });
 
-        rentalButton.addActionListener(new ActionListener() {
+        avalibleInstrumentButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 new RentalStudentWindow(modifyStudent); // Open the Rental StudentWindow
+            }
+        });
+
+        rentalButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                new InstrumentRentalWindow(modifyStudent); // Open the Rental StudentWindow
+            }
+        });
+
+        terminateRentalButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                new TerminateRentalWindow(modifyStudent); // Open the TerminateRentalWindow
             }
         });
 
@@ -58,12 +76,20 @@ public class MainApplication extends JFrame {
         deleteButton.setBounds(115,150,125,25);
         deleteButton.setFocusable(false);
 
-        rentalButton.setBounds(300, 100, 200, 25);
+        avalibleInstrumentButton.setBounds(300, 100, 200, 25);
+        avalibleInstrumentButton.setFocusable(false);
+
+        rentalButton.setBounds(300, 150, 200, 25);
         rentalButton.setFocusable(false);
 
-        add(rentalButton);
+        terminateRentalButton.setBounds(300, 250, 200, 25);
+        terminateRentalButton.setFocusable(false);
+
+        add(avalibleInstrumentButton);
         add(addButton);
         add(deleteButton);
+        add(rentalButton);
+        add(terminateRentalButton);
 
 
 
