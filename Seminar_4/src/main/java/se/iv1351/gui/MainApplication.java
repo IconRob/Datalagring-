@@ -1,17 +1,25 @@
 package se.iv1351.gui;
 
 import se.iv1351.integration.ModifyStudent;
-
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import se.iv1351.gui.TerminateRentalWindow;
 
+/**
+ * MainApplication class provides the main GUI window for the Soundgood application's admin panel.
+ * It contains buttons for various functionalities like adding or deleting students, managing rentals, etc.
+ */
 public class MainApplication extends JFrame {
     private JButton addButton, deleteButton, avalibleInstrumentButton, rentalButton, terminateRentalButton;
     private ModifyStudent modifyStudent;
 
+    /**
+     * Constructs a MainApplication window with a ModifyStudent instance for database operations.
+     *
+     * @param modifyStudent An instance of ModifyStudent for handling student and instrument modifications.
+     */
     public MainApplication(ModifyStudent modifyStudent) {
         this.modifyStudent = modifyStudent;
 

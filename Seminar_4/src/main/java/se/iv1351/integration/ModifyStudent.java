@@ -1,7 +1,7 @@
 package se.iv1351.integration;
+
 import java.sql.ResultSet;
 import java.util.*;
-
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
@@ -10,17 +10,16 @@ import java.sql.Statement;
 import java.time.LocalDate;
 
 /**
- * The ModifyStudent class provides methods for modifying student information and instrument rentals.
+ * ModifyStudent class provides methods for modifying student records and instrument rentals in the database.
  */
 public class ModifyStudent {
     private Connection connection;
     private DatabaseOperations databaseOperations;
 
-
     /**
-     * Creates a new instance of the ModifyStudent class with the specified database connection.
+     * Constructs a ModifyStudent instance with a database connection.
      *
-     * @param connection The database connection.
+     * @param connection The database connection to be used for student modifications.
      */
     public ModifyStudent(Connection connection) {
         this.connection = connection;
@@ -28,24 +27,24 @@ public class ModifyStudent {
     }
 
     /**
-     * Retrieves the DatabaseOperations object associated with this ModifyStudent instance.
+     * Returns the DatabaseOperations instance for further database operations.
      *
-     * @return The DatabaseOperations object.
+     * @return The DatabaseOperations instance.
      */
     public DatabaseOperations getDatabaseOperations() {
         return databaseOperations;
     }
 
     /**
-     * Adds a new student to the database.
+     * Adds a student to the database.
      *
-     * @param firstName    The first name of the student.
-     * @param lastName     The last name of the student.
+     * @param firstName The first name of the student.
+     * @param lastName The last name of the student.
      * @param personNumber The personal identification number of the student.
-     * @param street       The street address of the student.
-     * @param zip          The postal code of the student's city.
-     * @param city         The city where the student lives.
-     * @return True if the student was successfully added, false otherwise.
+     * @param street The street address of the student.
+     * @param zip The ZIP code of the student's address.
+     * @param city The city of the student's address.
+     * @return true if the operation was successful, false otherwise.
      */
     public boolean addStudent(String firstName, String lastName, String personNumber, String street, String zip, String city) {
         try {
@@ -75,10 +74,10 @@ public class ModifyStudent {
     }
 
     /**
-     * Deletes a student from the database.
+     * Deletes a student from the database based on their ID.
      *
-     * @param studentId The ID of the student to delete.
-     * @return True if the student was successfully deleted, false otherwise.
+     * @param studentId The ID of the student to be deleted.
+     * @return true if the operation was successful, false otherwise.
      */
     public boolean deleteStudent(int studentId) {
         try {
@@ -102,7 +101,11 @@ public class ModifyStudent {
         }
     }
 
-    
+    /**
+     * Retrieves available instruments for rental.
+     *
+     * @return ResultSet containing available instruments.
+     */
     public ResultSet getAvailableInstruments() {
         ResultSet resultSet = null;
         try {
@@ -120,19 +123,14 @@ public class ModifyStudent {
         return resultSet;
     }
 
-
-    /*public ResultSet getAvailableInstruments() {
-        ResultSet resultSet = null;
-        try {
-            String query = "SELECT * FROM instrument_rental WHERE available = TRUE";
-            PreparedStatement preparedStatement = connection.prepareStatement(query);
-            resultSet = preparedStatement.executeQuery();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return resultSet;
-    }*/
-
+    /**
+     * Rents an instrument to a student.
+     * This method handles the creation of a new booking, updating the rental table, and setting the instrument's availability.
+     *
+     * @param studentId The ID of the student renting the instrument.
+     * @param instrumentRentalId The ID of the instrument to be rented.
+     * @return true if the rental process is successful, false otherwise.
+     */
     public boolean rentInstrument(int studentId, int instrumentRentalId) {
         Connection conn = null;
         PreparedStatement rentalStmt = null;
@@ -204,6 +202,12 @@ public class ModifyStudent {
         return false;
     }
 
+    /**
+     * Checks if a student can rent more instruments based on the current active rentals.
+     *
+     * @param studentId The ID of the student to check for active rentals.
+     * @return true if the student can rent more instruments, false otherwise.
+     */
     public boolean canRentMoreInstruments(int studentId) {
         String query = "SELECT COUNT(*) AS active_rental_count " +
                 "FROM rental r " +
@@ -259,7 +263,13 @@ public class ModifyStudent {
         return instruments;
     }
 
-    // Metod för att avsluta en uthyrning
+    /**
+     * Terminates an instrument rental.
+     * This method updates the rental status and makes the instrument available again.
+     *
+     * @param instrumentBookingId The ID of the booking to terminate.
+     * @return true if the termination process is successful, false otherwise.
+     */
     public boolean terminateRental(int instrumentBookingId) {
         Connection conn = null;
         PreparedStatement terminateStmt = null;
@@ -305,7 +315,16 @@ public class ModifyStudent {
         }
         return false;
     }
-
-
-
 }
+
+    /*public ResultSet getAvailableInstruments() {
+        ResultSet resultSet = null;
+        try {
+            String query = "SELECT * FROM instrument_rental WHERE available = TRUE";
+            PreparedStatement preparedStatement = connection.prepareStatement(query);
+            resultSet = preparedStatement.executeQuery();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return resultSet;
+    }*/

@@ -8,11 +8,20 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.List;
 
+/**
+ * The InstrumentRentalWindow class provides a GUI window for renting and terminating instrument rentals.
+ * It allows users to select a student and an instrument for rental operations.
+ */
 public class InstrumentRentalWindow extends JFrame {
     private ModifyStudent modifyStudent;
     private JComboBox<String> studentComboBox, instrumentComboBox;
     private JButton rentButton;
 
+    /**
+     * Constructs an InstrumentRentalWindow with a ModifyStudent instance for handling rental operations.
+     *
+     * @param modifyStudent An instance of ModifyStudent for managing instrument rentals.
+     */
     public InstrumentRentalWindow(ModifyStudent modifyStudent) {
         this.modifyStudent = modifyStudent;
         setTitle("Instrument Rental");
@@ -27,6 +36,7 @@ public class InstrumentRentalWindow extends JFrame {
         loadStudentData();
         loadInstrumentData();
 
+        // Adding action listeners for the buttons
         rentButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -35,16 +45,18 @@ public class InstrumentRentalWindow extends JFrame {
         });
 
 
+        // Adding components to the layout
         add(new JLabel("Student:"));
         add(studentComboBox);
         add(new JLabel("Instrument:"));
         add(instrumentComboBox);
         add(rentButton);
 
+        // Finalize window setup
         setLocationRelativeTo(null);
         setVisible(true);
     }
-
+    
     private void loadStudentData() {
         List<String> students = modifyStudent.getDatabaseOperations().getAllStudents();
         for (String student : students) {
@@ -74,3 +86,4 @@ public class InstrumentRentalWindow extends JFrame {
     }
 
 }
+

@@ -7,11 +7,20 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.List;
 
+/**
+ * TerminateRentalWindow class provides a GUI window for terminating active instrument rentals.
+ * It allows users to select an active rental and terminate it.
+ */
+
 public class TerminateRentalWindow extends JFrame {
     private ModifyStudent modifyStudent;
     private JComboBox<String> rentalComboBox;
     private JButton terminateButton;
-
+    /**
+     * Constructs a TerminateRentalWindow with a ModifyStudent instance for handling rental terminations.
+     *
+     * @param modifyStudent An instance of ModifyStudent for managing instrument rentals.
+     */
     public TerminateRentalWindow(ModifyStudent modifyStudent) {
         this.modifyStudent = modifyStudent;
         setTitle("Terminate Rental");

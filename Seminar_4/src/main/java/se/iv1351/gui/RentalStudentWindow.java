@@ -7,10 +7,19 @@ import java.awt.*;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+/**
+ * RentalStudentWindow class provides a GUI window for displaying available instruments for rent.
+ * It shows the instruments in a table format with relevant details.
+ */
 public class RentalStudentWindow extends JFrame {
     private ModifyStudent modifyStudent;
     private JTable instrumentTable;
 
+    /**
+     * Constructs a RentalStudentWindow with a ModifyStudent instance for displaying available instruments.
+     *
+     * @param modifyStudent An instance of ModifyStudent for querying available instruments.
+     */
     public RentalStudentWindow(ModifyStudent modifyStudent) {
         this.modifyStudent = modifyStudent;
         setTitle("Available Instruments for Rent");
