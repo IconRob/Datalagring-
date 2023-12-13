@@ -1,3 +1,4 @@
+package se.iv1351.database;
 /**
  * @file DatabaseConnector.java
  * @brief This file contains the DatabaseConnector class, which is used to establish a connection to the PostgreSQL database.
