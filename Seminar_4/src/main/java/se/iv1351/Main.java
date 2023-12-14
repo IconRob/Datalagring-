@@ -7,10 +7,15 @@ import javax.swing.*;
 import java.sql.Connection;
 
 /**
- * Main class serves as the entry point for the Soundgood application.
- * It establishes a database connection and launches the main GUI.
+ * The Main class is the entry point of the program.
+ * It attempts to establish a database connection and starts the GUI.
  */
 public class Main {
+    /**
+     * The main method is the starting point of the application.
+     *
+     * @param args Command-line arguments (not used in this application).
+     */
     public static void main(String[] args) {
         // Attempt to establish a database connection
         DatabaseConnector databaseConnector = new DatabaseConnector();

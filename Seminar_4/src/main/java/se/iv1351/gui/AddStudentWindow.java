@@ -7,8 +7,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 /**
- * The AddStudentWindow class provides a GUI window for adding new students to the database.
- * It allows the user to enter student details and submit them.
+ * The `AddStudentWindow` class represents a graphical user interface (GUI) window
+ * for adding a new student's information to the system.
  */
 public class AddStudentWindow extends JFrame {
     private JTextField firstNameField, lastNameField, personNumberField, streetField, zipField, cityField;
@@ -16,9 +16,9 @@ public class AddStudentWindow extends JFrame {
     private ModifyStudent modifyStudent;
 
     /**
-     * Constructs an AddStudentWindow with a ModifyStudent instance for database operations.
+     * Constructs an `AddStudentWindow` object with the provided `ModifyStudent` instance.
      *
-     * @param modifyStudent An instance of ModifyStudent for handling student modifications.
+     * @param modifyStudent The `ModifyStudent` instance used for adding a student.
      */
     public AddStudentWindow(ModifyStudent modifyStudent) {
         this.modifyStudent = modifyStudent;

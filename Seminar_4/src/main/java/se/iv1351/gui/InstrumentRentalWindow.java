@@ -9,8 +9,12 @@ import java.awt.event.ActionListener;
 import java.util.List;
 
 /**
- * The InstrumentRentalWindow class provides a GUI window for renting and terminating instrument rentals.
- * It allows users to select a student and an instrument for rental operations.
+ * The `InstrumentRentalWindow` class represents a graphical user interface (GUI) window
+ * for renting an instrument to a student.
+ *
+ * It allows the user to select a student and an available instrument from dropdown lists
+ * and click the "Rent Instrument" button to initiate the instrument rental process
+ * using the `ModifyStudent` class.
  */
 public class InstrumentRentalWindow extends JFrame {
     private ModifyStudent modifyStudent;
@@ -18,9 +22,9 @@ public class InstrumentRentalWindow extends JFrame {
     private JButton rentButton;
 
     /**
-     * Constructs an InstrumentRentalWindow with a ModifyStudent instance for handling rental operations.
+     * Constructs an `InstrumentRentalWindow` object with the provided `ModifyStudent` instance.
      *
-     * @param modifyStudent An instance of ModifyStudent for managing instrument rentals.
+     * @param modifyStudent The `ModifyStudent` instance used for renting instruments to students.
      */
     public InstrumentRentalWindow(ModifyStudent modifyStudent) {
         this.modifyStudent = modifyStudent;
@@ -56,7 +60,10 @@ public class InstrumentRentalWindow extends JFrame {
         setLocationRelativeTo(null);
         setVisible(true);
     }
-    
+
+    /**
+     * Loads student data from the database and populates the student combo box.
+     */
     private void loadStudentData() {
         List<String> students = modifyStudent.getDatabaseOperations().getAllStudents();
         for (String student : students) {
@@ -64,6 +71,9 @@ public class InstrumentRentalWindow extends JFrame {
         }
     }
 
+    /**
+     * Loads available instrument data from the database and populates the instrument combo box.
+     */
     private void loadInstrumentData() {
         List<String> instruments = modifyStudent.getDatabaseOperations().getAvailableInstruments1();
         for (String instrument : instruments) {
@@ -71,6 +81,10 @@ public class InstrumentRentalWindow extends JFrame {
         }
     }
 
+    /**
+     * Initiates the instrument rental process by obtaining the selected student and instrument
+     * and invoking the `rentInstrument` method of `ModifyStudent`.
+     */
     private void rentInstrument() {
         String selectedStudent = (String) studentComboBox.getSelectedItem();
         String selectedInstrument = (String) instrumentComboBox.getSelectedItem();

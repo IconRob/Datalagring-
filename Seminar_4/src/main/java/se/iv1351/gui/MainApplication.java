@@ -8,24 +8,28 @@ import java.awt.event.ActionListener;
 import se.iv1351.gui.TerminateRentalWindow;
 
 /**
- * MainApplication class provides the main GUI window for the Soundgood application's admin panel.
- * It contains buttons for various functionalities like adding or deleting students, managing rentals, etc.
+ * The `MainApplication` class represents the main graphical user interface (GUI) application
+ * for managing student records and instrument rentals in the Soundgood Music School.
+ *
+ * It provides buttons to access various functionalities, such as adding students, deleting students,
+ * viewing available instruments for rental, renting instruments, and terminating instrument rentals.
+ * These functionalities are triggered by opening different windows associated with each button.
  */
 public class MainApplication extends JFrame {
     private JButton addButton, deleteButton, avalibleInstrumentButton, rentalButton, terminateRentalButton;
     private ModifyStudent modifyStudent;
 
     /**
-     * Constructs a MainApplication window with a ModifyStudent instance for database operations.
+     * Constructs a `MainApplication` object with the provided `ModifyStudent` instance.
      *
-     * @param modifyStudent An instance of ModifyStudent for handling student and instrument modifications.
+     * @param modifyStudent The `ModifyStudent` instance used for managing student records and instrument rentals.
      */
     public MainApplication(ModifyStudent modifyStudent) {
         this.modifyStudent = modifyStudent;
 
 
 
-        // Create buttons
+        // Create buttons and label
         JLabel windowLabel = new JLabel("Soundgood Adminpanel");
         addButton = new JButton("Add Student");
         deleteButton = new JButton("Delete Student");
@@ -35,7 +39,7 @@ public class MainApplication extends JFrame {
 
 
 
-        // Set up button actions
+        // Set up button actions to open corresponding windows
         addButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -71,7 +75,7 @@ public class MainApplication extends JFrame {
             }
         });
 
-        // Layout the buttons in the main window
+        // Layout the buttons and labels in the main window
         setLayout(null);
 
         windowLabel.setBounds(175,25,300,25);
@@ -98,12 +102,6 @@ public class MainApplication extends JFrame {
         add(deleteButton);
         add(rentalButton);
         add(terminateRentalButton);
-
-
-
-
-
-
 
         // Window setup
         setLocationRelativeTo(null);

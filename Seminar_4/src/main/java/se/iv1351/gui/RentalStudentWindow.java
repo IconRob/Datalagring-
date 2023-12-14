@@ -8,17 +8,18 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 /**
- * RentalStudentWindow class provides a GUI window for displaying available instruments for rent.
- * It shows the instruments in a table format with relevant details.
+ * The `RentalStudentWindow` class represents a graphical user interface (GUI) window that displays
+ * a list of available instruments for rent in the Soundgood Music School. It retrieves instrument
+ * data from the `ModifyStudent` instance and displays it in a table format.
  */
 public class RentalStudentWindow extends JFrame {
     private ModifyStudent modifyStudent;
     private JTable instrumentTable;
 
     /**
-     * Constructs a RentalStudentWindow with a ModifyStudent instance for displaying available instruments.
+     * Constructs a `RentalStudentWindow` object with the provided `ModifyStudent` instance.
      *
-     * @param modifyStudent An instance of ModifyStudent for querying available instruments.
+     * @param modifyStudent The `ModifyStudent` instance used to retrieve available instrument data.
      */
     public RentalStudentWindow(ModifyStudent modifyStudent) {
         this.modifyStudent = modifyStudent;
@@ -26,7 +27,7 @@ public class RentalStudentWindow extends JFrame {
         setSize(600, 400);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 
-        // Hämta instrumentdata
+        // Retrieve instrument data from ModifyStudent
         ResultSet resultSet = modifyStudent.getAvailableInstruments();
         String[] columnNames = {"Instrument ID", "Type", "Brand", "Price per Month"/*, "Category", "Date Available"*/};
         DefaultTableModel tableModel = new DefaultTableModel(columnNames, 0);
@@ -38,16 +39,16 @@ public class RentalStudentWindow extends JFrame {
                 String brand = resultSet.getString("brand");
                 float price = resultSet.getFloat("price_per_month");
                 //String category = resultSet.getString("category");
-                // Notera: Datumet konverteras till String för att visa i tabellen
+                // Note: The date is converted to a String for display in the table
                 //String date = resultSet.getDate("date").toString();
 
-                // Lägg till rad i tabellmodellen
+                // Add a row to the table model
                 tableModel.addRow(new Object[]{id, type, brand, price/*, category, date*/});
             }
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
-            // Stäng ResultSet och PreparedStatement om de inte längre behövs
+            // Close the ResultSet and PreparedStatement if no longer needed
             try {
                 if (resultSet != null) {
                     resultSet.close();
@@ -57,12 +58,12 @@ public class RentalStudentWindow extends JFrame {
             }
         }
 
-        // Skapa tabellen med datan
+        // Create a table to display the instrument data
         instrumentTable = new JTable(tableModel);
         JScrollPane scrollPane = new JScrollPane(instrumentTable);
         add(scrollPane);
 
-        // Gör fönstret synligt
+        // Make the window visible
         setLocationRelativeTo(null);
         setVisible(true);
     }

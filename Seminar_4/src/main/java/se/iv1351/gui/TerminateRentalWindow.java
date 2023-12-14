@@ -8,18 +8,21 @@ import java.awt.event.ActionListener;
 import java.util.List;
 
 /**
- * TerminateRentalWindow class provides a GUI window for terminating active instrument rentals.
- * It allows users to select an active rental and terminate it.
+ * The `TerminateRentalWindow` class represents a graphical user interface (GUI) window that allows
+ * the termination of instrument rentals in the Soundgood Music School. It displays a list of active
+ * rentals retrieved from the `ModifyStudent` instance and provides the functionality to terminate a
+ * selected rental.
  */
 
 public class TerminateRentalWindow extends JFrame {
     private ModifyStudent modifyStudent;
     private JComboBox<String> rentalComboBox;
     private JButton terminateButton;
+
     /**
-     * Constructs a TerminateRentalWindow with a ModifyStudent instance for handling rental terminations.
+     * Constructs a `TerminateRentalWindow` object with the provided `ModifyStudent` instance.
      *
-     * @param modifyStudent An instance of ModifyStudent for managing instrument rentals.
+     * @param modifyStudent The `ModifyStudent` instance used to terminate rentals and retrieve active rental data.
      */
     public TerminateRentalWindow(ModifyStudent modifyStudent) {
         this.modifyStudent = modifyStudent;
@@ -48,6 +51,9 @@ public class TerminateRentalWindow extends JFrame {
         setVisible(true);
     }
 
+    /**
+     * Load active rental data into the rental combo box.
+     */
     private void loadRentalData() {
         rentalComboBox.removeAllItems();  // Rensa befintliga poster
         List<String> rentals = modifyStudent.getDatabaseOperations().getActiveRentals();
@@ -56,12 +62,15 @@ public class TerminateRentalWindow extends JFrame {
         }
     }
 
+    /**
+     * Terminate the selected rental and display a message based on the termination result.
+     */
     private void terminateRental() {
         String selectedRental = (String) rentalComboBox.getSelectedItem();
         if (selectedRental != null && !selectedRental.isEmpty()) {
             try {
-                // Antag att formatet är "Student ID: [id], Booking ID: [id], Instrument ID: [id]"
-                // Vi extraherar delen som innehåller "Booking ID: [id]"
+                // Assume the format is "Student ID: [id], Booking ID: [id], Instrument ID: [id]"
+                // Extract the part containing "Booking ID: [id]"
                 String bookingPart = selectedRental.split(",")[1].trim();
                 int instrumentBookingId = Integer.parseInt(bookingPart.split(":")[1].trim());
 
@@ -78,29 +87,4 @@ public class TerminateRentalWindow extends JFrame {
             JOptionPane.showMessageDialog(null, "No rental selected.");
         }
     }
-
-
-
-
-    /*private void terminateRental() {
-        String selectedRental = (String) rentalComboBox.getSelectedItem();
-        if (selectedRental != null && !selectedRental.isEmpty()) {
-            try {
-                String bookingPart = selectedRental.split(",")[1].trim();
-                int instrumentBookingId = Integer.parseInt(bookingPart.split(":")[1].trim());
-
-                if (modifyStudent.terminateRental(instrumentBookingId)) {
-                    JOptionPane.showMessageDialog(null, "Rental terminated successfully!");
-                    loadRentalData();  // Uppdatera listan av pågående uthyrningar
-                } else {
-                    JOptionPane.showMessageDialog(null, "Failed to terminate rental.");
-                }
-            } catch (Exception e) {
-                e.printStackTrace();
-                JOptionPane.showMessageDialog(null, "Error processing rental termination.");
-            }
-        } else {
-            JOptionPane.showMessageDialog(null, "No rental selected.");
-        }
-    }*/
 }

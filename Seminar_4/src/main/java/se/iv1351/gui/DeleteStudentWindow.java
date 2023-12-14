@@ -7,18 +7,21 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 /**
- * The DeleteStudentWindow class provides a GUI window for deleting existing students from the database.
- * It allows the user to enter a student ID and delete the corresponding student record.
+ * The `DeleteStudentWindow` class represents a graphical user interface (GUI) window
+ * for deleting a student from the system.
+ *
+ * It allows the user to input the student's ID and click the "Delete" button to delete
+ * the corresponding student from the system using the `ModifyStudent` class.
  */
 public class DeleteStudentWindow extends JFrame {
     private JTextField studentIdField;
     private JButton deleteButton;
     private ModifyStudent modifyStudent;
-    
+
     /**
-     * Constructs a DeleteStudentWindow with a ModifyStudent instance for database operations.
+     * Constructs a `DeleteStudentWindow` object with the provided `ModifyStudent` instance.
      *
-     * @param modifyStudent An instance of ModifyStudent for handling student modifications.
+     * @param modifyStudent The `ModifyStudent` instance used for deleting a student.
      */
     public DeleteStudentWindow(ModifyStudent modifyStudent) {
         this.modifyStudent = modifyStudent;

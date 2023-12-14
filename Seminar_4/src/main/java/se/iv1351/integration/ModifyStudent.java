@@ -1,7 +1,6 @@
 package se.iv1351.integration;
 
 import java.sql.ResultSet;
-import java.util.*;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
@@ -10,16 +9,16 @@ import java.sql.Statement;
 import java.time.LocalDate;
 
 /**
- * ModifyStudent class provides methods for modifying student records and instrument rentals in the database.
+ * The ModifyStudent class provides methods for modifying student information and instrument rentals.
  */
 public class ModifyStudent {
     private Connection connection;
     private DatabaseOperations databaseOperations;
 
     /**
-     * Constructs a ModifyStudent instance with a database connection.
+     * Creates a new instance of the ModifyStudent class with the specified database connection.
      *
-     * @param connection The database connection to be used for student modifications.
+     * @param connection The database connection.
      */
     public ModifyStudent(Connection connection) {
         this.connection = connection;
@@ -27,31 +26,31 @@ public class ModifyStudent {
     }
 
     /**
-     * Returns the DatabaseOperations instance for further database operations.
+     * Retrieves the DatabaseOperations object associated with this ModifyStudent instance.
      *
-     * @return The DatabaseOperations instance.
+     * @return The DatabaseOperations object.
      */
     public DatabaseOperations getDatabaseOperations() {
         return databaseOperations;
     }
 
     /**
-     * Adds a student to the database.
+     * Adds a new student to the database.
      *
-     * @param firstName The first name of the student.
-     * @param lastName The last name of the student.
+     * @param firstName    The first name of the student.
+     * @param lastName     The last name of the student.
      * @param personNumber The personal identification number of the student.
-     * @param street The street address of the student.
-     * @param zip The ZIP code of the student's address.
-     * @param city The city of the student's address.
-     * @return true if the operation was successful, false otherwise.
+     * @param street       The street address of the student.
+     * @param zip          The postal code of the student's city.
+     * @param city         The city where the student lives.
+     * @return True if the student was successfully added, false otherwise.
      */
     public boolean addStudent(String firstName, String lastName, String personNumber, String street, String zip, String city) {
         try {
-            // Skapa en SQL-fråga för att lägga till en student i tabellen "student"
+            // Create an SQL query to add a student to the "student" table
             String insertQuery = "INSERT INTO student (first_name, last_name, person_number, street, zip, city) VALUES (?, ?, ?, ?, ?, ?)";
 
-            // Förbered ett PreparedStatement för att utföra SQL-frågan
+            // Prepare a PreparedStatement to execute the SQL query
             PreparedStatement preparedStatement = connection.prepareStatement(insertQuery);
             preparedStatement.setString(1, firstName);
             preparedStatement.setString(2, lastName);
@@ -60,10 +59,10 @@ public class ModifyStudent {
             preparedStatement.setString(5, zip);
             preparedStatement.setString(6, city);
 
-            // Utför SQL-frågan och få antalet påverkade rader
+            // Execute the SQL query and get the number of affected rows
             int rowsAffected = preparedStatement.executeUpdate();
 
-            // Stäng PreparedStatement
+            // Close the PreparedStatement
             preparedStatement.close();
 
             return rowsAffected > 0;
@@ -74,24 +73,24 @@ public class ModifyStudent {
     }
 
     /**
-     * Deletes a student from the database based on their ID.
+     * Deletes a student from the database.
      *
-     * @param studentId The ID of the student to be deleted.
-     * @return true if the operation was successful, false otherwise.
+     * @param studentId The ID of the student to delete.
+     * @return True if the student was successfully deleted, false otherwise.
      */
     public boolean deleteStudent(int studentId) {
         try {
-            // Skapa en SQL-fråga för att ta bort en student med ett visst student_id
+            // Create an SQL query to delete a student with a specific student_id
             String deleteQuery = "DELETE FROM student WHERE student_id = ?";
 
-            // Förbered ett PreparedStatement för att utföra SQL-frågan
+            // Prepare a PreparedStatement to execute the SQL query
             PreparedStatement preparedStatement = connection.prepareStatement(deleteQuery);
             preparedStatement.setInt(1, studentId);
 
-            // Utför SQL-frågan och få antalet påverkade rader
+            // Execute the SQL query and get the number of affected rows
             int rowsAffected = preparedStatement.executeUpdate();
 
-            // Stäng PreparedStatement
+            // Close the PreparedStatement
             preparedStatement.close();
 
             return rowsAffected > 0;
@@ -102,14 +101,14 @@ public class ModifyStudent {
     }
 
     /**
-     * Retrieves available instruments for rental.
+     * Retrieves a ResultSet of available instruments with active rentals.
      *
-     * @return ResultSet containing available instruments.
+     * @return A ResultSet containing information about available instruments.
      */
     public ResultSet getAvailableInstruments() {
         ResultSet resultSet = null;
         try {
-            // Uppdaterad SQL-fråga för att inkludera kontroll av aktiv uthyrning
+            // Updated SQL query to include active rental checking
             String query = "SELECT ir.* FROM instrument_rental ir " +
                     "LEFT JOIN instrument_booking ib ON ir.instrument_rental_id = ib.instrument_rental_id " +
                     "AND ib.end_date > CURRENT_DATE " +
@@ -124,12 +123,11 @@ public class ModifyStudent {
     }
 
     /**
-     * Rents an instrument to a student.
-     * This method handles the creation of a new booking, updating the rental table, and setting the instrument's availability.
+     * Attempts to rent an instrument for a student.
      *
-     * @param studentId The ID of the student renting the instrument.
+     * @param studentId The ID of the student requesting the instrument.
      * @param instrumentRentalId The ID of the instrument to be rented.
-     * @return true if the rental process is successful, false otherwise.
+     * @return True if the instrument was successfully rented, false otherwise.
      */
     public boolean rentInstrument(int studentId, int instrumentRentalId) {
         Connection conn = null;
@@ -139,20 +137,21 @@ public class ModifyStudent {
 
         try {
             conn = this.connection;
-            conn.setAutoCommit(false); // Inaktivera auto-commit
+            conn.setAutoCommit(false); // Disable auto-commit
 
+            // Check if the student can rent more instruments
             if (!canRentMoreInstruments(studentId)) {
-                return false; // Studenten har redan hyrt max antal instrument
+                return false; // The student has already rented the maximum number of instruments
             }
 
-            // Skapa en ny bokning för instrumentet --
+            // Create a new booking for the instrument
             String insertBooking = "INSERT INTO instrument_booking (instrument_rental_id, start_date, end_date, delivery, is_active) VALUES (?, CURRENT_DATE, ?, FALSE, TRUE)";
             bookingStmt = conn.prepareStatement(insertBooking, Statement.RETURN_GENERATED_KEYS);
             bookingStmt.setInt(1, instrumentRentalId);
             bookingStmt.setDate(2, java.sql.Date.valueOf(LocalDate.now().plusMonths(1))); // Exempel: en månads uthyrning
             int bookingRowsAffected = bookingStmt.executeUpdate();
 
-            // Hämta det genererade instrument_booking_id
+            // Get the generated instrument_booking_id
             int instrumentBookingId = 0;
             if (bookingRowsAffected > 0) {
                 ResultSet generatedKeys = bookingStmt.getGeneratedKeys();
@@ -163,27 +162,27 @@ public class ModifyStudent {
                 }
             }
 
-            // Lägg till en ny rad i 'rental'-tabellen
+            // Add a new entry in the 'rental' table
             String insertRental = "INSERT INTO rental (student_id, instrument_booking_id) VALUES (?, ?)";
             rentalStmt = conn.prepareStatement(insertRental);
             rentalStmt.setInt(1, studentId);
             rentalStmt.setInt(2, instrumentBookingId);
             int rentalRowsAffected = rentalStmt.executeUpdate();
 
-            // Uppdatera 'available' för instrumentet till 'false'
+            // Update 'available' for the instrument to 'false'
             if (rentalRowsAffected > 0) {
                 String updateInstrument = "UPDATE instrument_rental SET available = FALSE WHERE instrument_rental_id = ?";
                 updateStmt = conn.prepareStatement(updateInstrument);
                 updateStmt.setInt(1, instrumentRentalId);
                 updateStmt.executeUpdate();
 
-                conn.commit(); // Commit transaktionen
+                conn.commit(); // Commit the transaction
                 return true;
             }
         } catch (SQLException e) {
             if (conn != null) {
                 try {
-                    conn.rollback(); // Rollback om något går fel
+                    conn.rollback(); // Rollback if an error occurs
                 } catch (SQLException ex) {
                     ex.printStackTrace();
                 }
@@ -194,7 +193,7 @@ public class ModifyStudent {
                 if (rentalStmt != null) rentalStmt.close();
                 if (bookingStmt != null) bookingStmt.close();
                 if (updateStmt != null) updateStmt.close();
-                if (conn != null) conn.setAutoCommit(true); // Återaktivera auto-commit
+                if (conn != null) conn.setAutoCommit(true); // Re-enable auto-commit
             } catch (SQLException e) {
                 e.printStackTrace();
             }
@@ -203,10 +202,10 @@ public class ModifyStudent {
     }
 
     /**
-     * Checks if a student can rent more instruments based on the current active rentals.
+     * Checks if a student can rent more instruments.
      *
-     * @param studentId The ID of the student to check for active rentals.
-     * @return true if the student can rent more instruments, false otherwise.
+     * @param studentId The ID of the student to check.
+     * @return True if the student can rent more instruments, false otherwise.
      */
     public boolean canRentMoreInstruments(int studentId) {
         String query = "SELECT COUNT(*) AS active_rental_count " +
@@ -219,7 +218,7 @@ public class ModifyStudent {
             try (ResultSet resultSet = preparedStatement.executeQuery()) {
                 if (resultSet.next()) {
                     int activeRentalCount = resultSet.getInt("active_rental_count");
-                    return activeRentalCount < 2;  // Tillåt uthyrning om studenten har färre än 2 aktiva uthyrningar
+                    return activeRentalCount < 2;  // Allow renting if the student has fewer than 2 active rentals
                 }
             }
         } catch (SQLException e) {
@@ -228,47 +227,11 @@ public class ModifyStudent {
         return false;
     }
 
-
-    public List<String> getAllStudents() {
-        List<String> students = new ArrayList<>();
-        String query = "SELECT student_id, first_name, last_name FROM student";
-        try (PreparedStatement stmt = connection.prepareStatement(query);
-             ResultSet rs = stmt.executeQuery()) {
-            while (rs.next()) {
-                String student = rs.getInt("student_id") + " - " +
-                        rs.getString("first_name") + " " +
-                        rs.getString("last_name");
-                students.add(student);
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return students;
-    }
-
-    public List<String> getAvailableInstruments1() {
-        List<String> instruments = new ArrayList<>();
-        String query = "SELECT instrument_rental_id, type, brand FROM instrument_rental WHERE available = TRUE";
-        try (PreparedStatement stmt = connection.prepareStatement(query);
-             ResultSet rs = stmt.executeQuery()) {
-            while (rs.next()) {
-                String instrument = rs.getInt("instrument_rental_id") + " - " +
-                        rs.getString("type") + " (" +
-                        rs.getString("brand") + ")";
-                instruments.add(instrument);
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return instruments;
-    }
-
     /**
-     * Terminates an instrument rental.
-     * This method updates the rental status and makes the instrument available again.
+     * Terminates a rental and updates the availability of the associated instrument.
      *
-     * @param instrumentBookingId The ID of the booking to terminate.
-     * @return true if the termination process is successful, false otherwise.
+     * @param instrumentBookingId The ID of the instrument booking to terminate.
+     * @return True if the rental was successfully terminated, false otherwise.
      */
     public boolean terminateRental(int instrumentBookingId) {
         Connection conn = null;
@@ -277,28 +240,28 @@ public class ModifyStudent {
 
         try {
             conn = this.connection;
-            conn.setAutoCommit(false); // Inaktivera auto-commit
+            conn.setAutoCommit(false); // // Disable auto-commit
 
-            // Uppdatera 'is_active' till FALSE i 'instrument_booking'-tabellen
+            // Update 'is_active' to FALSE in 'instrument_booking' table
             String terminateQuery = "UPDATE instrument_booking SET is_active = FALSE, end_date = CURRENT_DATE WHERE instrument_booking_id = ?";
             terminateStmt = conn.prepareStatement(terminateQuery);
             terminateStmt.setInt(1, instrumentBookingId);
             int terminateRowsAffected = terminateStmt.executeUpdate();
 
             if (terminateRowsAffected > 0) {
-                // Uppdatera 'available' till TRUE i 'instrument_rental'-tabellen
+                // Update 'available' to TRUE in 'instrument_rental' table
                 String updateQuery = "UPDATE instrument_rental SET available = TRUE WHERE instrument_rental_id = (SELECT instrument_rental_id FROM instrument_booking WHERE instrument_booking_id = ?)";
                 updateStmt = conn.prepareStatement(updateQuery);
                 updateStmt.setInt(1, instrumentBookingId);
                 updateStmt.executeUpdate();
 
-                conn.commit(); // Commit transaktionen
+                conn.commit(); // Commit the transaction
                 return true;
             }
         } catch (SQLException e) {
             if (conn != null) {
                 try {
-                    conn.rollback(); // Rollback om något går fel
+                    conn.rollback(); // Rollback if something goes wrong
                 } catch (SQLException ex) {
                     ex.printStackTrace();
                 }
@@ -308,7 +271,7 @@ public class ModifyStudent {
             try {
                 if (terminateStmt != null) terminateStmt.close();
                 if (updateStmt != null) updateStmt.close();
-                if (conn != null) conn.setAutoCommit(true); // Återaktivera auto-commit
+                if (conn != null) conn.setAutoCommit(true); // Re-enable auto-commit
             } catch (SQLException e) {
                 e.printStackTrace();
             }
@@ -316,15 +279,3 @@ public class ModifyStudent {
         return false;
     }
 }
-
-    /*public ResultSet getAvailableInstruments() {
-        ResultSet resultSet = null;
-        try {
-            String query = "SELECT * FROM instrument_rental WHERE available = TRUE";
-            PreparedStatement preparedStatement = connection.prepareStatement(query);
-            resultSet = preparedStatement.executeQuery();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return resultSet;
-    }*/
