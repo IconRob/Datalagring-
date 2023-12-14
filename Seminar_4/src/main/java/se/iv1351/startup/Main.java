@@ -1,4 +1,4 @@
-package se.iv1351;
+package se.iv1351.startup;
 
 import se.iv1351.database.DatabaseConnector;
 import se.iv1351.integration.ModifyStudent;
