@@ -4,6 +4,7 @@ package se.iv1351.model;
  * The `Instrument` class represents a musical instrument with various attributes.
  * It provides methods to access and set information about the instrument.
  */
+
 public class Instrument {
     private int id;
     private String type;
