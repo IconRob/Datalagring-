@@ -134,6 +134,7 @@ public class ModifyStudent {
         PreparedStatement rentalStmt = null;
         PreparedStatement bookingStmt = null;
         PreparedStatement updateStmt = null;
+        PreparedStatement checkAvailableStmt = null;
 
         try {
             conn = this.connection;
@@ -141,7 +142,18 @@ public class ModifyStudent {
 
             // Check if the student can rent more instruments
             if (!canRentMoreInstruments(studentId)) {
+                conn.rollback(); // Rollback
                 return false; // The student has already rented the maximum number of instruments
+            }
+
+            // Lock the instrument row to ensure it is available for rent -- Select for update
+            String selectForUpdateQuery = "SELECT available FROM instrument_rental WHERE instrument_rental_id = ? FOR UPDATE";
+            checkAvailableStmt = conn.prepareStatement(selectForUpdateQuery);
+            checkAvailableStmt.setInt(1, instrumentRentalId);
+            ResultSet rs = checkAvailableStmt.executeQuery();
+            if (!rs.next() || !rs.getBoolean("available")) {
+                conn.rollback(); // Rollback since the instrument is not available
+                return false;
             }
 
             // Create a new booking for the instrument
@@ -158,6 +170,7 @@ public class ModifyStudent {
                 if (generatedKeys.next()) {
                     instrumentBookingId = generatedKeys.getInt(1);
                 } else {
+                    conn.rollback(); // Rollback since no ID was obtained
                     throw new SQLException("Creating booking failed, no ID obtained.");
                 }
             }
@@ -178,6 +191,8 @@ public class ModifyStudent {
 
                 conn.commit(); // Commit the transaction
                 return true;
+            } else {
+                conn.rollback(); // Rollback since the rental was not successful
             }
         } catch (SQLException e) {
             if (conn != null) {
@@ -190,6 +205,7 @@ public class ModifyStudent {
             e.printStackTrace();
         } finally {
             try {
+                if (checkAvailableStmt != null) checkAvailableStmt.close();
                 if (rentalStmt != null) rentalStmt.close();
                 if (bookingStmt != null) bookingStmt.close();
                 if (updateStmt != null) updateStmt.close();
