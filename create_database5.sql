@@ -152,7 +152,8 @@ CREATE TABLE instrument_booking (
  instrument_rental_id INT NOT NULL,
  start_date DATE NOT NULL,
  end_date DATE NOT NULL,
- delivery BOOLEAN
+ delivery BOOLEAN,
+ is_active BOOLEAN
 );
 
 ALTER TABLE instrument_booking ADD CONSTRAINT PK_instrument_booking PRIMARY KEY (instrument_booking_id);
